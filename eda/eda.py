@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 """plot price"""
 
@@ -50,3 +51,49 @@ def plot_var_with_na(df: pd.DataFrame):  # make a list of the categorical variab
     vars_with_na = [var for var in df.columns if df[var].isnull().sum() > 1]
     for var in vars_with_na:
         analyse_na_value(df, var)
+
+
+def analyse_continuous(df: pd.DataFrame, var: str):
+    df = df.copy()
+    df[var].hist(bins=20)
+    plt.ylabel('Number of wines')
+    plt.xlabel(var)
+    plt.title(var)
+    plt.show()
+
+
+def plot_cont_var(df: pd.DataFrame):
+    # list of numerical variables
+    num_vars = [var for var in df.columns if df[var].dtypes != 'O']
+    for var in num_vars:
+        analyse_continuous(df, var)
+
+
+# let's explore the relationship between the wine price and the transformed numerical variables
+# with more detail
+def relation_cont_target(num_vars: list, df: pd.DataFrame):
+    def transform_analyse_continuous(d: pd.DataFrame, v: str):
+        d = d.copy()
+
+        # log does not take negative values, so let's be careful and skip those variables
+        if 0 in d[v].unique():
+            pass
+        else:
+            # log transform
+            d[v] = np.log(d[v])
+            # df['price'] = np.log(df['price'])
+            plt.scatter(d[v], d['price'])
+            plt.ylabel('price')
+            plt.xlabel(v)
+            plt.show()
+
+    for var in num_vars:
+        if var != 'price':
+            transform_analyse_continuous(df, var)
+
+
+def plot_cont_target(df: pd.DataFrame, target:str):
+    num_vars = [var for var in df.columns if df[var].dtypes != 'O']
+    for var in num_vars:
+        if var != target:
+            sns.boxplot(x='points', y=df[target], data=df, palette=sns.color_palette('RdBu', 5))
