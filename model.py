@@ -1,6 +1,7 @@
 import tensorflow as tf
 
 
+
 def build_model(dim):
     Input = tf.keras.layers.Input(shape=dim, dtype='float64')
     # Input = tf.keras.layers.Input(shape=dim, dtype='float64', sparse=True)

@@ -26,13 +26,15 @@ def show_price_outliers(df: pd.DataFrame):
     plt.show()
 
 
-def remove_price_outliers(df: pd.DataFrame):
+def remove_price_outliers(df: pd.DataFrame)-> pd.DataFrame:
     price_mean = np.mean(df.price.values)
     std_price = np.std(df.price.values)
     price_outliers = np.logical_and(df.price.values < price_mean + 3 * std_price,
                                     df.price.values > price_mean - 3 * std_price)
     df = df.copy()
     df = df[price_outliers]
+
+    return df
 
 
 def analyse_na_value(df: pd.DataFrame, var: str):

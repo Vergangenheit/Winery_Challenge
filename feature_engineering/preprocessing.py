@@ -4,6 +4,12 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 import numpy as np
 
+# function to replace NA in categorical variables
+def fill_categorical_na(df:pd.DataFrame, var_list:list)->pd.DataFrame:
+    X = df.copy()
+    X[var_list] = df[var_list].fillna('Missing')
+    return X
+
 
 def tokenize_feature(df: pd.DataFrame, feature: str) -> np.array:
     tk = Tokenizer(filters='')
